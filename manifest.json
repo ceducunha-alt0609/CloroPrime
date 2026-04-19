@@ -1,0 +1,83 @@
+{
+  "name": "CloroPrime — Gestão de Cloração",
+  "short_name": "CloroPrime",
+  "description": "Monitoramento e gestão inteligente de cloração de água. Calcule doses, acompanhe o tambor, registre leituras e garanta água segura.",
+  "start_url": "./CloroPrime.html",
+  "id": "cloroprime-app",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#0c0e12",
+  "theme_color": "#0c0e12",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "CloroPrime — Painel de Operação"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Operação",
+      "short_name": "Operação",
+      "description": "Leitura diária e ação imediata",
+      "url": "./CloroPrime.html?view=operacao",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Visão geral e gráficos",
+      "url": "./CloroPrime.html?view=dashboard",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Calculadora",
+      "short_name": "Calc",
+      "description": "Calcular dose e autonomia",
+      "url": "./CloroPrime.html?view=calc",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Abastecer",
+      "short_name": "Abastecer",
+      "description": "Registrar abastecimento do tambor",
+      "url": "./CloroPrime.html?view=abastecer",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
