@@ -80,25 +80,18 @@ s=s.replace('<span class="tag">Tambor 100 L</span>','<span class="tag">Tambor co
 s=s.replace('Quanto tempo os 100 L devem render','Quanto tempo o tambor deve render',1)
 s=s.replace("const aviso = litrosProduto > tambor ? ' ⚠️ forte demais p/ 100 L' : '';","const aviso = litrosProduto > tambor ? ' ⚠️ concentração insuficiente para esta regulagem/capacidade' : '';",1)
 
-old="""      if(!dados.config || !Array.isArray(dados.hist)) {
-        toast('Arquivo inválido. Selecione um backup gerado pelo CloroPrime.', 'err', 5000);
-        return;
-      }
-      if(!confirm(`Importar backup de ${dados.ultimoBackup ? new Date(dados.ultimoBackup).toLocaleString('pt-BR') : 'data desconhecida'}?\n\nISTO VAI SUBSTITUIR todos os dados atuais.`)) return;
-      state = dados;
-"""
-new="""      if(!dados || typeof dados !== 'object' || Array.isArray(dados) ||
+pattern=re.compile(r"      if\(!dados\.config \|\| !Array\.isArray\(dados\.hist\)\) \{\n        toast\('Arquivo inválido\. Selecione um backup gerado pelo CloroPrime\.', 'err', 5000\);\n        return;\n      \}\n      if\(!confirm\(`Importar backup de .*?\) return;\n      state = dados;", re.S)
+replacement="""      if(!dados || typeof dados !== 'object' || Array.isArray(dados) ||
          !dados.config || typeof dados.config !== 'object' || Array.isArray(dados.config) ||
          !Array.isArray(dados.hist)) {
         toast('Arquivo inválido. Selecione um backup gerado pelo CloroPrime.', 'err', 5000);
         input.value = '';
         return;
       }
-      if(!confirm(`Importar backup de ${dados.ultimoBackup ? new Date(dados.ultimoBackup).toLocaleString('pt-BR') : 'data desconhecida'}?\n\nISTO VAI SUBSTITUIR todos os dados atuais.`)) { input.value = ''; return; }
-      state = normalizeState(dados);
-"""
-assert old in s, 'backup import anchor not found'
-s=s.replace(old,new,1)
+      if(!confirm(`Importar backup de ${dados.ultimoBackup ? new Date(dados.ultimoBackup).toLocaleString('pt-BR') : 'data desconhecida'}?\\n\\nISTO VAI SUBSTITUIR todos os dados atuais.`)) { input.value = ''; return; }
+      state = normalizeState(dados);"""
+s,n=pattern.subn(replacement,s,count=1)
+assert n==1, 'backup import anchor not found'
 p.write_text(s,encoding='utf-8')
 
 sw=Path('sw.js')
