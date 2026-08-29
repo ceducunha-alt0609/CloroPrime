@@ -1,0 +1,218 @@
+LINES=6100 BYTES=284269
+localStorage: 9
+  3789:   try { const d = JSON.parse(localStorage.getItem(KEY)); if(d) state = d; } catch(e){}
+  3792:   localStorage.setItem(KEY, JSON.stringify(state));
+  4665:     localStorage.removeItem(KEY);
+  4756:     localStorage.setItem('cloroprime.sideGroups', JSON.stringify(collapsed));
+  4762:     const raw = localStorage.getItem('cloroprime.sideGroups');
+  5895:   const dismissed = parseInt(localStorage.getItem(DISMISSED_KEY) || '0');
+  5935:       localStorage.setItem(DISMISSED_KEY, Date.now());
+  5949:           localStorage.setItem(DISMISSED_KEY, Date.now() * 10); // não mostrar mais
+  6002:     localStorage.setItem(DISMISSED_KEY, Date.now() * 10);
+seed: 0
+demo: 0
+backup: 26
+  679: .backup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  680: @media(max-width:400px){ .backup-grid { grid-template-columns:1fr; } }
+  2304:               <div class="left"><span class="ico">🎨</span><span class="txt"><strong>Personalizar</strong><span>Tema, fontes e backup</span></span></div><span class="go">›</span>
+  3749:     <!-- BACKUP -->
+  3751:       <div class="config-title">💾 Backup dos dados</div>
+  3753:         Os dados ficam no armazenamento local do navegador. Exporte um backup antes de trocar de celular, limpar o cache ou instalar o app em outro dispositivo.
+  3755:       <div class="backup-grid">
+  3756:         <button class="btn btn-primary" onclick="exportarBackup()">📤 Exportar backup</button>
+  3757:         <button class="btn btn-secondary" onclick="document.getElementById('backup-import-input').click()">📥 Importar backup</button>
+  3759:       <input type="file" id="backup-import-input" accept=".json" style="display:none" onchange="importarBackup(this)">
+  3760:       <div id="backup-status" style="margin-top:10px;font-size:12px;color:var(--text3)">
+  3761:         Último backup: <span id="backup-ultima-data">nunca exportado</span>
+  5469:   // backup info
+  5470:   const ultimoEl = document.getElementById('backup-ultima-data');
+  5471:   if(ultimoEl && state.ultimoBackup) {
+  5472:     ultimoEl.textContent = new Date(state.ultimoBackup).toLocaleString('pt-BR');
+  5584: // ─── Backup ────────────────────────────────────────────────────────
+  5585: function exportarBackup() {
+  5586:   state.ultimoBackup = new Date().toISOString();
+  5594:   a.download = `CloroPrime_backup_${data}.json`;
+  5597:   const ultimoEl = document.getElementById('backup-ultima-data');
+  5599:   toast('📤 Backup exportado com sucesso!', 'ok');
+  5602: function importarBackup(input) {
+  5610:         toast('Arquivo inválido. Selecione um backup gerado pelo CloroPrime.', 'err', 5000);
+  5613:       if(!confirm(`Importar backup de ${dados.ultimoBackup ? new Date(dados.ultimoBackup).toLocaleString('pt-BR') : 'data desconhecida'}?\n\nISTO VAI SUBSTITUIR todos os dados atuais.`)) return;
+restore: 4
+  4700: function restoreSidebarState() {
+  4760: function restoreSideGroups() {
+  5788:   restoreSidebarState();
+  5789:   restoreSideGroups();
+import: 12
+  45:   input, select, textarea { font-size: 16px !important; }
+  1387:   grid-template-columns: 60px minmax(0, 1fr) !important;
+  1779:   width: 60px !important;
+  1805: .collapse-fab { display: none !important; }
+  1976:   .collapse-fab { display: none !important; }
+  3225:       <button class="faq-question" onclick="toggleFaq(this)">O que é cloro residual livre e por que importa? <span class="fq-icon">+</span></button>
+  3352:         <strong>Sim.</strong> O síndico responde pela conservação e uso adequado das partes comuns, incluindo o sistema de abastecimento de água (art. 1.348 do Código Civil). Em caso de surto de doença de veiculação hídrica causado por falta de cloração adequada, pode haver responsabilidade civil e 
+  3757:         <button class="btn btn-secondary" onclick="document.getElementById('backup-import-input').click()">📥 Importar backup</button>
+  3759:       <input type="file" id="backup-import-input" accept=".json" style="display:none" onchange="importarBackup(this)">
+  5602: function importarBackup(input) {
+  5613:       if(!confirm(`Importar backup de ${dados.ultimoBackup ? new Date(dados.ultimoBackup).toLocaleString('pt-BR') : 'data desconhecida'}?\n\nISTO VAI SUBSTITUIR todos os dados atuais.`)) return;
+  5619:       toast('📥 Backup importado com sucesso! ✅', 'ok', 4000);
+export: 9
+  3060:         <button class="btn btn-secondary btn-sm" onclick="exportarHistorico()">📥 Exportar CSV</button>
+  3753:         Os dados ficam no armazenamento local do navegador. Exporte um backup antes de trocar de celular, limpar o cache ou instalar o app em outro dispositivo.
+  3756:         <button class="btn btn-primary" onclick="exportarBackup()">📤 Exportar backup</button>
+  3761:         Último backup: <span id="backup-ultima-data">nunca exportado</span>
+  5585: function exportarBackup() {
+  5599:   toast('📤 Backup exportado com sucesso!', 'ok');
+  5759: function exportarHistorico() {
+  5760:   if(!state.hist.length) { toast('Histórico vazio, nada para exportar.','warn'); return; }
+  5773:   toast('📥 Histórico exportado como CSV!','ok');
+supabase: 0
+firebase: 0
+serviceWorker.register: 1
+  5866:       navigator.serviceWorker.register('./sw.js')
+caches.delete: 0
+location.reload: 1
+  4666:     location.reload();
+toISOString().split: 0
+clear(): 0
+removeItem(: 1
+  4665:     localStorage.removeItem(KEY);
+setItem(: 5
+  3792:   localStorage.setItem(KEY, JSON.stringify(state));
+  4756:     localStorage.setItem('cloroprime.sideGroups', JSON.stringify(collapsed));
+  5935:       localStorage.setItem(DISMISSED_KEY, Date.now());
+  5949:           localStorage.setItem(DISMISSED_KEY, Date.now() * 10); // não mostrar mais
+  6002:     localStorage.setItem(DISMISSED_KEY, Date.now() * 10);
+innerHTML: 20
+  4239:     pills.innerHTML = `<span class="pill ${pClass}">${pTxt} — ${pct}%</span>`;
+  4257:     az.innerHTML = '';
+  4258:     if(pct <= cfg.alertaCrit) az.innerHTML += `<div class="alert alert-danger">🚨 Tambor CRÍTICO (${pct}%) — Abasteça imediatamente! Autonomia: ${days.toFixed(1)} dia(s).</div>`;
+  4259:     else if(pct <= cfg.alertaBaixo) az.innerHTML += `<div class="alert alert-warn">⚠️ Nível baixo (${pct}%) — Autonomia: ${days.toFixed(1)} dias.</div>`;
+  4260:     if(cfg.fce === 0) az.innerHTML += `<div class="alert alert-warn">⚠️ Dosador FCE em 0% — nenhum cloro sendo injetado.</div>`;
+  4359:   da.innerHTML = '';
+  4361:     da.innerHTML = '<div class="alert alert-danger">🚨 Abaixo do mínimo ANVISA (0,2 mg/L). Aumente o percentual do FCE.</div>';
+  4363:     da.innerHTML = `<div class="alert alert-warn">⚠️ Abaixo da meta de ${meta} mg/L. Considere aumentar para atingir o objetivo.</div>`;
+  4365:     da.innerHTML = '<div class="alert alert-danger">🚨 Supercloramento! Acima de 5 mg/L é prejudicial à saúde. Reduza o FCE.</div>';
+  4367:     da.innerHTML = `<div class="alert alert-info">✅ Dosagem adequada (${cAtivo_mgL.toFixed(2)} mg/L). Confirme com medição real.</div>`;
+  4390:   tbody.innerHTML = cenarios.map(pct => {
+  4573:     el.innerHTML = `<div class="empty">
+  4588:   el.innerHTML = state.hist.map(h => {
+  4888:   t.innerHTML =
+  5114:   if(elUltima) elUltima.innerHTML = ultima !== null ? `${ultima.toFixed(2)} <span class="unit">mg/L</span>` : `-- <span class="unit">mg/L</span>`;
+  5190:   if(elMes) elMes.innerHTML = custoPorL > 0 ? `R$ ${custoMes.toFixed(2)} <span class="unit">/ mês est.</span>` : `R$ -- <span class="unit">configure o preço</span>`;
+  5636:   bar.innerHTML = Array.from({length: WZ_TOTAL}, (_,i) =>
+  5745:   zona.innerHTML = alertas.map(a =>
+  5906:     banner.innerHTML = `
+  5965:     m.innerHTML = `
+chlor: 0
+cloro: 67
+  9: <meta name="apple-mobile-web-app-title" content="CloroPrime">
+  10: <title>CloroPrime — Gestão de Cloração</title>
+  13: <meta name="application-name" content="CloroPrime">
+  1149: /* ── Régua visual de faixa (cloro livre) ── */
+  2067:     <div class="sp-brand">Cloro<em>Prime</em></div>
+  2103:       <div class="wizard-title">Bem-vindo ao CloroPrime!</div>
+  2114:       <div class="wizard-sub">Isso influencia a necessidade de cloro — água de poço precisa de dosagem mais controlada que a da concessionária.</div>
+  2265:               <div class="brand-title">Cloro<span>Prime</span></div>
+  2346:         <div class="title">Cloro<span>Prime</span></div>
+  2498:       <div class="hc hc-ok" id="hc-cloro">
+  2505:           <div class="hc-label">Cloro residual</div>
+  2506:           <div class="hc-val" id="ops-cloro-display">--</div>
+  2507:           <div class="hc-sub" id="ops-cloro-sub">sem leitura</div>
+  2595:           <div class="big-val" id="ops-cloro-litros">--</div>
+  2698:             <div class="chart-title">Leituras de cloro</div>
+  2733:           <div class="chart-sub">média de cloro residual por semana</div>
+  2830:         <label>Meta de cloro residual (mg/L)</label>
+  2848:         <span class="result-label">Cloro ativo injetado</span>
+  2864:         <span class="result-label">Cloro por pessoa/dia</span>
+  2876:           <div class="scenario-sub">Calcula quanto produto colocar no tambor de 100 L, com base na força do cloro, regulagem do FCE e dose alvo.</div>
+  2919:             <th>Cloro no tambor</th>
+  3214:       CloroPrime v3.6 · Condomínio · <span id="cfg-info"></span>
+  3222:     <div class="faq-cat">Cloro e segurança</div>
+  3225:       <button class="faq-question" onclick="toggleFaq(this)">O que é cloro residual livre e por que importa? <span class="fq-icon">+</span></button>
+  3227:         É a quantidade de cloro disponível na água <strong>depois de percorrer toda a tubulação</strong>. É o que efetivamente protege contra bactérias no ponto de consumo. A ANVISA (Portaria 888/2021) exige mínimo de <strong>0,2 mg/L</strong> em qualquer ponto da rede e máximo de <strong>5,0 mg/L</
+ppm: 0
+dos: 112
+  415: /* Dose calc result highlight */
+  416: .dose-highlight {
+  423: .dose-highlight .big-val { font-family: var(--mono); font-size: var(--fn-hero); font-weight: 700; color: var(--accent); line-height: 1; }
+  424: .dose-highlight .big-unit { font-family: var(--mono); font-size: var(--fn-md); color: var(--text2); margin-top: 4px; }
+  425: .dose-highlight .big-note { font-size: var(--fs-small); color: var(--text3); margin-top: 8px; }
+  1668: /* tooltips removidos */
+  2060:         <!-- Cantos dourados -->
+  2114:       <div class="wizard-sub">Isso influencia a necessidade de cloro — água de poço precisa de dosagem mais controlada que a da concessionária.</div>
+  2132:     <!-- Step 2: Volume dos reservatórios -->
+  2136:       <div class="wizard-sub">Some todos os reservatórios e caixas d'água do condomínio. Valor aproximado é suficiente para começar.</div>
+  2155:     <!-- Step 3: Bomba dosadora -->
+  2158:       <div class="wizard-title">Bomba dosadora</div>
+  2290:               <div class="left"><span class="ico">∑</span><span class="txt"><strong>Calcular</strong><span>Mistura, dose e fita</span></span></div><span class="go">›</span>
+  2322:               <div class="quick-s" id="side-days-sub">dias estimados</div>
+  2326:               <div class="quick-v" id="side-dose">--</div>
+  2327:               <div class="quick-s" id="side-dose-sub">Produto no tambor de 100 L</div>
+  2439:             <div class="osl-s">dias estimados</div>
+  2594:         <div class="dose-highlight ops-highlight">
+  2605:             <span class="result-label">Dose alvo operacional</span>
+  2606:             <span class="result-val" id="ops-dose-alvo">--</span>
+  2645:           <div class="dc-k">Dosador FCE</div>
+  2681:         <div class="m-label">Dosador</div>
+  2682:         <div class="m-value" id="card-dosador-value">--%</div>
+  2683:         <div class="m-sub" id="card-dosador-sub">Consumo diário na regulagem atual</div>
+  2789:       <div class="info-cell"><div class="label">Dosador FCE</div><div class="value accent" id="dash-fce">--%</div></div>
+hipoclor: 16
+  2186:       <div class="wizard-title">Hipoclorito que você usa</div>
+  2189:         <label>Concentração do hipoclorito</label>
+  2211:       <div class="wizard-title">Tambor de hipoclorito</div>
+  2564:             <label>Hipoclorito da mistura (%)</label>
+  2596:           <div class="big-unit">L de hipoclorito no tambor de 100 L</div>
+  2771:           <div class="drum-sub">Hipoclorito no tambor</div>
+  2790:       <div class="info-cell"><div class="label">Hipoclorito</div><div class="value" id="dash-conc">--%</div></div>
+  2813:           <label>Concentração do hipoclorito</label>
+  3234:         Tecnicamente sim, mas <strong>não é recomendado</strong> por 3 razões: a concentração (~2,5%) é muito baixa, o que exige grandes volumes e entope o tambor rápido; contém surfactantes e aditivos que podem espumar na bomba; e o custo por mg de cloro ativo é muito maior que o hipoclorito 10-12%
+  3253:           <li>Se persistir, reduza a proporção de hipoclorito na mistura do tambor</li>
+  3271:         Para uma bomba FCE 1.5 com hipoclorito 12% e poço artesiano, <strong>15-20%</strong> é um bom ponto de partida. Mas o ponto correto depende da sua vazão e do volume de água. O fluxo certo é:
+  3323:         A bomba dosadora não injeta hipoclorito puro — ela injeta uma <strong>solução diluída</strong>, o que protege a bomba e permite ajuste fino. Para hipoclorito 12% numa bomba FCE 1.5 em 15-20%:
+  3326:           <li>Adicione <strong>15-20 L de hipoclorito 12%</strong></li>
+  3329:         Nunca inverta a ordem — hipoclorito primeiro pode espirrar e causar queimaduras. Use a aba Calcular do app para obter o valor exato para o seu cenário.
+  4052:   const ceEl = document.getElementById('ops-copy-extra'); if(ceEl) ceEl.textContent = 'Com produto ' + String(conc).replace('.', ',') + '% e FCE em ' + fmtBR(fce,0) + '%, a mistura sugerida fica em ' + fmtBR(cloro,1) + ' L de hipoclorito no tambor de 100 L.';
+  5729:     alertas.push({ tipo:'info', icon:'💡', msg:'Produto 2,5% (água sanitária doméstica): volume necessário é muito maior. Considere hipoclorito 10-12%.' });
+reserv: 30
+  2132:     <!-- Step 2: Volume dos reservatórios -->
+  2136:       <div class="wizard-sub">Some todos os reservatórios e caixas d'água do condomínio. Valor aproximado é suficiente para começar.</div>
+  2138:         <label>Reservatório principal (L)</label>
+  2139:         <input type="number" id="wz-reserv" placeholder="Ex: 30000" min="1000" step="1000" value="30000">
+  2142:         <label>Reservatório secundário (L) <span style="color:var(--text3);font-weight:400">opcional</span></label>
+  2143:         <input type="number" id="wz-reserv-sec" placeholder="Ex: 9000" min="0" step="500" value="9000">
+  2552:               <option value="secundario">Saída do reservatório secundário</option>
+  2553:               <option value="principal">Saída do reservatório principal</option>
+  2678:         <div class="m-sub" id="card-tambor-sub">Nível restante e reserva prática</div>
+  2791:       <div class="info-cell"><div class="label">Reserv. principal</div><div class="value" id="dash-reserv-main">-- L</div></div>
+  2792:       <div class="info-cell"><div class="label">Reserv. secundário</div><div class="value" id="dash-reserv-sec">-- L</div></div>
+  2949:               <option value="secundario">Saída do reservatório secundário</option>
+  2950:               <option value="principal">Saída do reservatório principal</option>
+  3075:           <label>Reservatório principal (L)</label>
+  3076:           <input type="number" id="cfg-reserv" value="30000" onchange="saveConfig()">
+  3079:           <label>Reservatório secundário (L)</label>
+  3080:           <input type="number" id="cfg-reserv-sec" value="9000" onchange="saveConfig()">
+  3241:         Enquanto você ainda está calibrando o sistema (primeiros 30-60 dias): <strong>a cada 2-3 dias</strong>, sempre no mesmo ponto (a torneira mais distante do reservatório). Após estabilizar: <strong>1-2x por semana</strong> é suficiente. Sempre faça uma leitura extra depois de eventos como chuv
+  3779:     reserv: 30000, reservSec: 9000, caixas: 8, volCaixa: 2000,
+  4251:   const mr = document.getElementById('dash-reserv-main'); if(mr) mr.textContent = fmtBR(cfg.reserv, 0) + ' L';
+  4252:   const sr = document.getElementById('dash-reserv-sec'); if(sr) sr.textContent = fmtBR(cfg.reservSec || 9000, 0) + ' L';
+  4459:     acao = 'Mantenha a mistura atual. Só ajuste se houver mudança forte de vazão, chuva, limpeza de reservatório ou alteração na água da rua.';
+  4609:   document.getElementById('cfg-reserv').value = c.reserv;
+  4610:   document.getElementById('cfg-reserv-sec').value = c.reservSec || 9000;
+  4629:   const total = ((c.caixas * c.volCaixa) + c.reserv + (c.reservSec || 0)) / 1000;
+volume: 10
+  2132:     <!-- Step 2: Volume dos reservatórios -->
+  2135:       <div class="wizard-title">Volume total de água</div>
+  2987:         <label>Volume atual no tambor (litros)</label>
+  3025:           <label>Volume comprado (L)</label>
+  3187:           <label>Volume do galão (L)</label>
+  3234:         Tecnicamente sim, mas <strong>não é recomendado</strong> por 3 razões: a concentração (~2,5%) é muito baixa, o que exige grandes volumes e entope o tambor rápido; contém surfactantes e aditivos que podem espumar na bomba; e o custo por mg de cloro ativo é muito maior que o hipoclorito 10-12%
+  3271:         Para uma bomba FCE 1.5 com hipoclorito 12% e poço artesiano, <strong>15-20%</strong> é um bom ponto de partida. Mas o ponto correto depende da sua vazão e do volume de água. O fluxo certo é:
+  4522:   if(isNaN(atual) || isNaN(add) || add <= 0) { toast('Preencha o nível atual e o volume adicionado.','warn'); return; }
+  5045:   if(!preco || !vol) { infoEl.textContent = 'Preencha preço e volume para calcular o custo por litro.'; return; }
+  5729:     alertas.push({ tipo:'info', icon:'💡', msg:'Produto 2,5% (água sanitária doméstica): volume necessário é muito maior. Considere hipoclorito 10-12%.' });
+
+DUP_FUNCTIONS
+
+DUP_IDS
+cp-ib-install: 2
