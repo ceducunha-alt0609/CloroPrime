@@ -1,5 +1,5 @@
 /* CloroPrime — Service Worker nível banco */
-const CACHE_VERSION = 'cloroprime-bank-v1.0.0';
+const CACHE_VERSION = 'cloroprime-bank-v1.1.0-audit-safety';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
@@ -23,7 +23,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k => ![STATIC_CACHE, RUNTIME_CACHE].includes(k)).map(k => caches.delete(k)));
+    await Promise.all(keys.filter(k => k.startsWith('cloroprime-') && ![STATIC_CACHE, RUNTIME_CACHE].includes(k)).map(k => caches.delete(k)));
     await self.clients.claim();
   })());
 });
