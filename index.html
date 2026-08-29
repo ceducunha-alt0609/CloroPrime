@@ -2845,7 +2845,7 @@ header { display: none; }
 
     <div class="result-card" id="dose-details" style="display:none">
       <div class="result-row">
-        <span class="result-label">Cloro ativo injetado</span>
+        <span class="result-label">Dose teórica com produto sem diluição</span>
         <span class="result-val" id="res-cativo">-- mg/L</span>
       </div>
       <div class="result-row">
@@ -4363,22 +4363,14 @@ function calcular() {
   const consumoPessoa = vazao > 0 ? (cAtivo_mgL * (vazao * 24) / cfg.pessoas) : 0;
   document.getElementById('res-pessoa').textContent = consumoPessoa.toFixed(0) + ' mg';
 
-  const note = `Com ${conc}% de concentração, vazão de ${vazao} L/h e bomba ${fmtBR(maxFlowLH,1)} L/h @100%`;
+  const note = `Referência teórica sem diluir o produto no tambor · ${conc}% · vazão ${vazao} L/h · bomba ${fmtBR(maxFlowLH,1)} L/h @100%`;
   document.getElementById('dose-note').textContent = note;
 
-  // Alertas na calculadora
+  // Este valor usa a concentração do produto puro e serve apenas como referência dimensional.
+  // A operação real usa produto diluído no tambor e deve ser ajustada pela mistura e pela leitura de campo.
   const da = document.getElementById('dose-alerta');
   da.style.display = 'block';
-  da.innerHTML = '';
-  if(cAtivo_mgL < 0.2) {
-    da.innerHTML = '<div class="alert alert-danger">🚨 Abaixo do mínimo ANVISA (0,2 mg/L). Aumente o percentual do FCE.</div>';
-  } else if(cAtivo_mgL < meta) {
-    da.innerHTML = `<div class="alert alert-warn">⚠️ Abaixo da meta de ${meta} mg/L. Considere aumentar para atingir o objetivo.</div>`;
-  } else if(cAtivo_mgL > 5) {
-    da.innerHTML = '<div class="alert alert-danger">🚨 Supercloramento! Acima de 5 mg/L é prejudicial à saúde. Reduza o FCE.</div>';
-  } else {
-    da.innerHTML = `<div class="alert alert-info">✅ Dosagem adequada (${cAtivo_mgL.toFixed(2)} mg/L). Confirme com medição real.</div>`;
-  }
+  da.innerHTML = `<div class="alert alert-info">ℹ️ Referência teórica com produto sem diluição: ${cAtivo_mgL.toFixed(2)} mg/L. Para operação, use a mistura do tambor abaixo e confirme pela leitura real no ponto de coleta.</div>`;
   calcularMisturaCenarios();
   avaliarFita();
 }
@@ -4419,9 +4411,7 @@ function calcularMisturaCenarios() {
 }
 
 function getFitaBand(ponto) {
-  if(ponto === 'principal') return { min: 0.3, max: 0.8, alvo: '0,3 a 0,8 mg/L' };
-  if(ponto === 'secundario') return { min: 0.2, max: 0.6, alvo: '0,2 a 0,6 mg/L' };
-  return { min: 0.2, max: 0.5, alvo: '0,2 a 0,5 mg/L' };
+  return getOperationalTargets(ponto);
 }
 
 function avaliarFita() {
@@ -4435,7 +4425,7 @@ function avaliarFita() {
   const tambor = parseFloat(state.config.tambor || 100);
   const alvo = parseFloat(document.getElementById('mix-alvo')?.value || state.config.alvoDose || 1.0);
   const injReal = getPumpFlowLH(fce, bomba);
-  const misturaAtual = Math.max(0, Math.min(tambor, calcMixLiters(alvo, vazao, produto, injReal)));
+  const misturaAtual = Math.max(0, Math.min(tambor, calcMixLiters(alvo, vazao, produto, injReal, tambor)));
 
   let classe = 'ok';
   let rotulo = 'IDEAL';

@@ -1,5 +1,5 @@
 /* CloroPrime — Service Worker nível banco */
-const CACHE_VERSION = 'cloroprime-bank-v1.1.0-audit-safety';
+const CACHE_VERSION = 'cloroprime-bank-v1.2.0-consistency';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
