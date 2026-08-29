@@ -2985,12 +2985,12 @@ header { display: none; }
     <div class="drum-card">
       <div class="field">
         <label>Volume atual no tambor (litros)</label>
-        <input type="number" id="ab-atual" placeholder="0" min="0" max="100" step="0.5" oninput="previewAbast()">
+        <input type="number" id="ab-atual" placeholder="0" min="0" step="0.5" oninput="previewAbast()">
       </div>
 
       <div class="field">
         <label>Litros adicionados</label>
-        <input type="number" id="ab-add" placeholder="Ex: 60" min="0" max="100" step="0.5" oninput="previewAbast()">
+        <input type="number" id="ab-add" placeholder="Ex: 60" min="0" step="0.5" oninput="previewAbast()">
       </div>
 
       <div class="field-row">
@@ -3046,7 +3046,7 @@ header { display: none; }
     <div class="drum-card">
       <div class="field">
         <label>Nível atual real no tambor (L)</label>
-        <input type="number" id="nivel-manual" placeholder="Quanto tem agora?" min="0" max="100" step="0.5">
+        <input type="number" id="nivel-manual" placeholder="Quanto tem agora?" min="0" step="0.5">
       </div>
       <button class="btn btn-secondary" onclick="atualizarNivel()">📏 Atualizar nível</button>
     </div>
@@ -3836,6 +3836,12 @@ function showView(id, triggerEl=null) {
 function fmtBR(n, d=1) {
   return Number(n || 0).toLocaleString('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
+function parseLocalDate(value) {
+  if(!value) return null;
+  const m = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(!m) return new Date(value);
+  return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+}
 function getPumpFlowLH(fcePct, maxLH) {
   return (Number(fcePct || 0) / 100) * Number(maxLH || 0);
 }
@@ -4512,8 +4518,9 @@ function salvarConfig() {
 function previewAbast() {
   const atual = parseFloat(document.getElementById('ab-atual').value) || 0;
   const add = parseFloat(document.getElementById('ab-add').value) || 0;
-  const total = Math.min(atual + add, state.config.tambor);
-  const pct = Math.round((total / state.config.tambor) * 100);
+  const capacidade = Number(state.config.tambor || 100);
+  const total = Math.min(Math.max(0, atual + add), capacidade);
+  const pct = capacidade > 0 ? Math.round((total / capacidade) * 100) : 0;
   document.getElementById('ab-preview').style.display = 'block';
   document.getElementById('ab-prev-total').textContent = total.toFixed(1) + ' L';
   document.getElementById('ab-prev-pct').textContent = pct + '%';
@@ -4522,8 +4529,11 @@ function previewAbast() {
 function registrarAbast() {
   const atual = parseFloat(document.getElementById('ab-atual').value);
   const add = parseFloat(document.getElementById('ab-add').value);
-  if(isNaN(atual) || isNaN(add) || add <= 0) { toast('Preencha o nível atual e o volume adicionado.','warn'); return; }
-  const total = Math.min(atual + add, state.config.tambor);
+  const capacidade = Number(state.config.tambor || 100);
+  if(!Number.isFinite(atual) || !Number.isFinite(add) || atual < 0 || add <= 0) { toast('Preencha o nível atual e o volume adicionado.','warn'); return; }
+  if(atual > capacidade) { toast(`O nível atual não pode ultrapassar ${capacidade} L.`, 'warn'); return; }
+  if(atual + add > capacidade) { toast(`O abastecimento ultrapassa a capacidade do tambor (${capacidade} L).`, 'warn'); return; }
+  const total = atual + add;
   const conc = document.getElementById('ab-conc').value;
   const marca = document.getElementById('ab-marca').value;
   const obs = document.getElementById('ab-obs').value;
@@ -4664,8 +4674,10 @@ function saveConfig() {
 }
 
 function resetApp() {
-  if(confirm('Isso apagará TODOS os dados. Confirma?')) {
+  if(confirm('Isso apagará TODOS os dados do CloroPrime neste navegador. Confirma?')) {
     localStorage.removeItem(KEY);
+    localStorage.removeItem('cloroprime.sideGroups');
+    localStorage.removeItem('cp_install_dismissed');
     location.reload();
   }
 }
@@ -5021,7 +5033,7 @@ function renderFiltroStatus() {
     if(infoEl) infoEl.textContent = 'Informe a data da última troca para monitorar.';
     return;
   }
-  const ultima = new Date(troca);
+  const ultima = parseLocalDate(troca);
   const proxima = new Date(ultima);
   proxima.setDate(proxima.getDate() + intervalo);
   const hoje = new Date();
@@ -5049,10 +5061,13 @@ function renderCustoInfo() {
   const custoPorL = preco / vol;
   const cfg = state.config;
   const bomba = parseFloat(cfg.bombaMax || 1.5);
-  const consumoDia = getPumpFlowLH(cfg.fce, bomba) * 24;
-  const custoDia = consumoDia * custoPorL;
+  const consumoSolucaoDia = getPumpFlowLH(cfg.fce, bomba) * 24;
+  const mix = getMixPlan(cfg.fce, cfg.hipoct);
+  const fracaoProduto = Number(cfg.tambor || 0) > 0 ? Math.min(1, Math.max(0, mix.product / Number(cfg.tambor))) : 0;
+  const consumoProdutoDia = consumoSolucaoDia * fracaoProduto;
+  const custoDia = consumoProdutoDia * custoPorL;
   const custoMes = custoDia * 30;
-  infoEl.textContent = `R$ ${custoPorL.toFixed(2)}/L · ~R$ ${custoDia.toFixed(2)}/dia · ~R$ ${custoMes.toFixed(2)}/mês`;
+  infoEl.textContent = `R$ ${custoPorL.toFixed(2)}/L de produto · ~${consumoProdutoDia.toFixed(2)} L produto/dia · ~R$ ${custoMes.toFixed(2)}/mês`;
 }
 
 // ─── Charts ────────────────────────────────────────────────────────
@@ -5180,9 +5195,12 @@ function renderChartCusto() {
   const preco = parseFloat(cfg.precoProduto) || 0;
   const vol = parseFloat(cfg.volGalao) || 20;
   const bomba = parseFloat(cfg.bombaMax || 1.5);
-  const consumoDia = getPumpFlowLH(cfg.fce, bomba) * 24;
+  const consumoSolucaoDia = getPumpFlowLH(cfg.fce, bomba) * 24;
+  const mix = getMixPlan(cfg.fce, cfg.hipoct);
+  const fracaoProduto = Number(cfg.tambor || 0) > 0 ? Math.min(1, Math.max(0, mix.product / Number(cfg.tambor))) : 0;
+  const consumoProdutoDia = consumoSolucaoDia * fracaoProduto;
   const custoPorL = preco > 0 && vol > 0 ? preco / vol : 0;
-  const custoDia = consumoDia * custoPorL;
+  const custoDia = consumoProdutoDia * custoPorL;
   const hoje = new Date();
   const diasNoMes = new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
   const diaAtual = hoje.getDate();
@@ -5191,7 +5209,7 @@ function renderChartCusto() {
   const elSub = document.getElementById('ch-custo-sub');
   const custoMes = custoDia * diasNoMes;
   if(elMes) elMes.innerHTML = custoPorL > 0 ? `R$ ${custoMes.toFixed(2)} <span class="unit">/ mês est.</span>` : `R$ -- <span class="unit">configure o preço</span>`;
-  if(elSub) elSub.textContent = custoPorL > 0 ? `R$ ${custoPorL.toFixed(2)}/L · ${consumoDia.toFixed(2)} L/dia` : 'Configure preço em Config';
+  if(elSub) elSub.textContent = custoPorL > 0 ? `R$ ${custoPorL.toFixed(2)}/L produto · ${consumoProdutoDia.toFixed(2)} L produto/dia` : 'Configure preço em Config';
 
   const ctx = document.getElementById('chart-custo');
   if(!ctx) return;
